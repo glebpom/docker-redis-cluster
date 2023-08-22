@@ -1,5 +1,4 @@
-# Build based on redis:6.0 from 2020-05-05
-FROM redis@sha256:f7ee67d8d9050357a6ea362e2a7e8b65a6823d9b612bc430d057416788ef6df9
+FROM redis:6.2-bookworm
 
 LABEL maintainer="Johan Andersson <Grokzen@gmail.com>"
 
@@ -9,8 +8,13 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Install system dependencies
 RUN apt-get update -qq && \
+    apt-get install -y git golang && \
+    (cd /tmp && git clone https://github.com/tianon/gosu.git && cd gosu && go get -u && go build &&  cp gosu /usr/local/bin/gosu) && \
+    rm -rf /tmp/gosu /root/go && \
+    apt-get upgrade -y && \
     apt-get install --no-install-recommends -yqq \
-      net-tools supervisor ruby rubygems locales gettext-base wget gcc make g++ build-essential libc6-dev tcl && \
+      net-tools supervisor ruby rubygems locales gettext-base wget gcc make g++ build-essential libc6-dev tcl golang && \
+    apt-get purge -y golang* git && \
     apt-get clean -yqq
 
 # # Ensure UTF-8 lang and locale
@@ -23,8 +27,8 @@ ENV SSL_CERT_FILE=/usr/local/etc/openssl/cert.pem
 
 RUN gem install redis -v 4.1.3
 
-# This will always build the latest release/commit in the 6.0 branch
-ARG redis_version=7.0
+# This will always build the latest release/commit in the 6.2 branch
+ARG redis_version=6.2.13
 
 RUN wget -qO redis.tar.gz https://github.com/redis/redis/tarball/${redis_version} \
     && tar xfz redis.tar.gz -C / \
