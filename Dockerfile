@@ -15,7 +15,8 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -yqq \
       net-tools supervisor ruby rubygems locales gettext-base wget gcc make g++ build-essential libc6-dev tcl golang && \
     apt-get purge -y golang* git && \
-    apt-get clean -yqq
+    apt-get clean -yqq &&
+    rm -rf /var/lib/apt/lists/*
 
 # # Ensure UTF-8 lang and locale
 RUN locale-gen en_US.UTF-8
