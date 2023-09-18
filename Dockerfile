@@ -53,5 +53,7 @@ RUN chmod 755 /docker-entrypoint.sh
 
 EXPOSE 7000 7001 7002 7003 7004 7005 7006 7007 5000 5001 5002
 
+USER redis
+
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["redis-cluster"]
