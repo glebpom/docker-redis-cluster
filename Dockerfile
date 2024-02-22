@@ -1,4 +1,4 @@
-FROM redis:6.2-bookworm
+FROM public.ecr.aws/docker/library/redis:6.2-bookworm
 
 LABEL maintainer="Johan Andersson <Grokzen@gmail.com>"
 
