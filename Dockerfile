@@ -1,5 +1,6 @@
-# Build based on redis:6.0 from 2020-05-05
-FROM redis@sha256:f7ee67d8d9050357a6ea362e2a7e8b65a6823d9b612bc430d057416788ef6df9
+ARG REDIS_VERSION=6.2
+
+FROM public.ecr.aws/docker/library/redis:${REDIS_VERSION}-bookworm
 
 LABEL maintainer="Johan Andersson <Grokzen@gmail.com>"
 
@@ -23,10 +24,9 @@ ENV SSL_CERT_FILE=/usr/local/etc/openssl/cert.pem
 
 RUN gem install redis -v 4.1.3
 
-# This will always build the latest release/commit in the 6.0 branch
-ARG redis_version=7.0
+ARG REDIS_VERSION=6.2.13
 
-RUN wget -qO redis.tar.gz https://github.com/redis/redis/tarball/${redis_version} \
+RUN wget -qO redis.tar.gz https://github.com/redis/redis/tarball/${REDIS_VERSION} \
     && tar xfz redis.tar.gz -C / \
     && mv /redis-* /redis
 
